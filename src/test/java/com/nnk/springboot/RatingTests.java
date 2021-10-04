@@ -2,6 +2,7 @@ package com.nnk.springboot;
 
 import com.nnk.springboot.domain.Rating;
 import com.nnk.springboot.repositories.RatingRepository;
+import com.nnk.springboot.services.RatingService;
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,7 +20,7 @@ import java.util.Optional;
 public class RatingTests {
 
 	@Autowired
-	private RatingRepository ratingRepository;
+	private RatingService ratingService;
 
 	@Test
 	public void ratingTest() {

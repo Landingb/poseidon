@@ -2,6 +2,7 @@ package com.nnk.springboot;
 
 import com.nnk.springboot.domain.CurvePoint;
 import com.nnk.springboot.repositories.CurvePointRepository;
+import com.nnk.springboot.services.CurvePointService;
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,7 +21,7 @@ import java.util.Optional;
 public class CurvePointTests {
 
 	@Autowired
-	private CurvePointRepository curvePointRepository;
+	private CurvePointService curvePointService;
 
 	@Test
 	public void curvePointTest() {

@@ -2,6 +2,7 @@ package com.nnk.springboot;
 
 import com.nnk.springboot.domain.RuleName;
 import com.nnk.springboot.repositories.RuleNameRepository;
+import com.nnk.springboot.services.RuleNameService;
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,7 +20,7 @@ import java.util.Optional;
 public class RuleTests {
 
 	@Autowired
-	private RuleNameRepository ruleNameRepository;
+	private RuleNameService ruleNameService;
 
 	@Test
 	public void ruleTest() {

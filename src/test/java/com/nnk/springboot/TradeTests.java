@@ -2,6 +2,7 @@ package com.nnk.springboot;
 
 import com.nnk.springboot.domain.Trade;
 import com.nnk.springboot.repositories.TradeRepository;
+import com.nnk.springboot.services.TradeService;
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,7 +20,7 @@ import java.util.Optional;
 public class TradeTests {
 
 	@Autowired
-	private TradeRepository tradeRepository;
+	private TradeService tradeService;
 
 	@Test
 	public void tradeTest() {

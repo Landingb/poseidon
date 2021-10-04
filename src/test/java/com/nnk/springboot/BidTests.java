@@ -2,6 +2,7 @@ package com.nnk.springboot;
 
 import com.nnk.springboot.domain.BidList;
 import com.nnk.springboot.repositories.BidListRepository;
+import com.nnk.springboot.services.BidListService;
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,44 +21,44 @@ import java.util.Optional;
 public class BidTests {
 
 	@Autowired
-	private BidListRepository bidListRepository;
+	private BidListService bidListService;
 
 	@Test
 	public void bidCrudTest_shouldProcessAllCrudFeatures() {
-		Bid bid = new Bid("Account Test", "Type Test", 10d);
+		BidList bid = new BidList("Account Test", "Type Test", 10d);
 
 		// Save
-		bid = bidService.save(bid);
+		bid = bidListService.save(bid);
 		Assert.assertNotNull(bid.getId());
 		Assert.assertEquals(bid.getBidQuantity(), 10d, 10d);
 
 		// Update
 		bid.setBidQuantity(20d);
-		bid = bidService.save(bid);
+		bid = bidListService.save(bid);
 		Assert.assertEquals(bid.getBidQuantity(), 20d, 20d);
 
 		// Find
-		List<Bid> listResult = bidService.findAll();
+		List<BidList> listResult = bidListService.findAll();
 		Assert.assertTrue(listResult.size() > 0);
 
 		// Delete
 		Integer id = bid.getId();
-		bidService.delete(id);
-		bid = bidService.findById(id);
+		bidListService.delete(id);
+		bid = bidListService.findById(id);
 		Assert.assertNull(bid);
 	}
 
 	@Test
 	public void bidConstrainTest_shouldThrowConstrainViolationException() {
-		Bid bid1 = new Bid("test", "", 10d);
-		Bid bid2 = new Bid("", "test", 10d);
-		Bid bid3 = new Bid("test", "test", 10.001d);
-		Bid bid4 = new Bid("test", "test", null);
+		BidList bid1 = new BidList("test", "", 10d);
+		BidList bid2 = new BidList("", "test", 10d);
+		BidList bid3 = new BidList("test", "test", 10.001d);
+		BidList bid4 = new BidList("test", "test", null);
 
-		Assertions.assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy( () -> bidService.save(bid1));
-		Assertions.assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy( () -> bidService.save(bid2));
-		Assertions.assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy( () -> bidService.save(bid3));
-		Assertions.assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy( () -> bidService.save(bid4));
+		Assertions.assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy( () -> bidListService.save(bid1));
+		Assertions.assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy( () -> bidListService.save(bid2));
+		Assertions.assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy( () -> bidListService.save(bid3));
+		Assertions.assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy( () -> bidListService.save(bid4));
 
 	}
 
@@ -87,7 +88,7 @@ public class BidTests {
 		String sourceListId = "Source test";
 		String side = "Side test";
 
-		Bid bid = new Bid(account, type, bidQuantity);
+		BidList bid = new BidList(account, type, bidQuantity);
 		bid.setAskQuantity(askQuantity);
 		bid.setAsk(ask);
 		bid.setBid(abid);
@@ -108,7 +109,7 @@ public class BidTests {
 		bid.setSide(side);
 
 		// Save
-		Bid bidSaved = bidService.save(bid);
+		BidList bidSaved = bidListService.save(bid);
 
 		// Assert
 		Assert.assertNotNull(bidSaved.getId());
@@ -135,7 +136,7 @@ public class BidTests {
 		Assert.assertEquals("side", side, bidSaved.getSide());
 
 		// Clean
-		bidService.delete(bidSaved.getId());
+		bidListService.delete(bidSaved.getId());
 	}
 
 }
