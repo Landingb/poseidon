@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,10 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    public UserController(UserService user) {
+        userService = user;
+    }
 
     @RequestMapping("/user/list")
     public String home(Model model)
@@ -42,30 +47,35 @@ public class UserController {
     }
 
     @PostMapping("/user/validate")
-    public String validate(@Valid User user, BindingResult result, Model model) {
+    public String validate(@Valid User user, BindingResult result, Model model) throws UsernameExistException, PasswordPatternException {
         log.info("POST request to /user/add");
-        if (!result.hasErrors()) {
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            user.setPassword(encoder.encode(user.getPassword()));
-            try {
-                userService.save(user);
-            } catch (PasswordPatternException e) {
-                e.printStackTrace();
-            } catch (UsernameExistException e) {
-                e.printStackTrace();
-            }
-            model.addAttribute("users", userService.findAll());
-            return "redirect:/user/list";
+        if (result.hasErrors()) {
+            return "user/add";
         }
-        return "user/add";
+
+        try {
+            userService.save(user);
+        } catch (PasswordPatternException e) {
+            log.info("POST Request to /user/validate, error: "+e.getMessage());
+            result.addError(new FieldError("password", "password", e.getMessage()));
+            e.printStackTrace();
+        } catch (UsernameExistException e) {
+            log.info("POST Request to /user/validate, error: " + e.getMessage());
+            result.addError(new FieldError("username", "username", e.getMessage()));
+            e.printStackTrace();
+            return "user/add";
+        }
+        return "redirect:/user/list";
     }
 
     @GetMapping("/user/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         log.info("GET request to /user/update" + id);
         User user = userService.findById(id);
-        user.setPassword("");
-        model.addAttribute("user", user);
+        if(user != null){
+            user.setPassword("");
+            model.addAttribute("user", user);
+        }
         return "user/update";
     }
 
@@ -77,17 +87,23 @@ public class UserController {
             return "user/update";
         }
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        /* BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(user.getPassword()));
-        user.setId(id);
+        user.setId(id); */
+
         try {
             userService.save(user);
         } catch (PasswordPatternException e) {
+            log.info("POST Request to /user/update" + id + ", error: " + e.getMessage());
+            result.addError(new FieldError("password", "password", e.getMessage()));
             e.printStackTrace();
+            return "user/update";
         } catch (UsernameExistException e) {
+            log.info("POST Request to /user/update" + id + ", error: " + e.getMessage());
+            result.addError(new FieldError("username", "username", e.getMessage()));
             e.printStackTrace();
+            return "user/update";
         }
-        model.addAttribute("users", userService.findAll());
         return "redirect:/user/list";
     }
 

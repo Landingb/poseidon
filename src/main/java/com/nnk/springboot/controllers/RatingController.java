@@ -22,6 +22,10 @@ public class RatingController {
 
     private RatingService ratingService;
 
+    public RatingController(RatingService rating) {
+        ratingService = rating;
+    }
+
     @RequestMapping("/rating/list")
     public String home(Model model)
     {

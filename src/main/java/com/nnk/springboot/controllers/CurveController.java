@@ -21,6 +21,10 @@ public class CurveController {
 
     private CurvePointService curvePointService;
 
+    public CurveController(CurvePointService curvePoint) {
+        curvePointService = curvePoint;
+    }
+
     @RequestMapping("/curvePoint/list")
     public String home(Model model)
     {

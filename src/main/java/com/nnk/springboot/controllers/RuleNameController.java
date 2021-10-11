@@ -21,6 +21,10 @@ public class RuleNameController {
 
     private RuleNameService ruleNameService;
 
+    public RuleNameController(RuleNameService ruleName) {
+        ruleNameService = ruleName;
+    }
+
     @RequestMapping("/ruleName/list")
     public String home(Model model)
     {
@@ -48,7 +52,7 @@ public class RuleNameController {
         else {
             return "ruleName/add";
         }
-        return "redirect:/ruleName/add";
+        return "redirect:/ruleName/list";
     }
 
     @GetMapping("/ruleName/update/{id}")
