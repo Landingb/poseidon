@@ -18,6 +18,7 @@ public class User {
     @NotBlank(message = "Role is mandatory")
     private String role;
 
+
     public Integer getId() {
         return id;
     }
