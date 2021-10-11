@@ -25,13 +25,15 @@ public class UserServiceImpl implements UserService {
 
 
     public User save(User user) throws PasswordPatternException, UsernameExistException {
+        //générer un utilisateur
+
         if(userRepository.existsByUsername(user.getUsername())) {
             throw new UsernameExistException("This user name already exist");
         }
 
-        if( ! user.getPassword().matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$")) {
+   /*     if( ! user.getPassword().matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$")) {
             throw new PasswordPatternException("At least 8 chars, one digits, one uppercase and one special char");
-        }
+        }*/
 
         user.setPassword(encoder.encode(user.getPassword()));
 

@@ -3,10 +3,12 @@ package com.nnk.springboot.services;
 import com.nnk.springboot.domain.Trade;
 import com.nnk.springboot.repositories.TradeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class TradeServiceImpl implements TradeService {
 
     private TradeRepository tradeRepository;
