@@ -24,7 +24,7 @@ public class TradeTests {
 
 	@Test
 	public void tradeTest() {
-		Trade trade = new Trade("Trade Account", "Type");
+		Trade trade = new Trade("Trade Account", "Type", 12.54);
 
 		// Save
 		trade = tradeService.save(trade);
@@ -50,8 +50,8 @@ public class TradeTests {
 	@Test
 	public void tradeConstraintTest_shouldThrowConstrainViolationException() {
 
-		Trade trade1 = new Trade("", "test");
-		Trade trade2 = new Trade("test", "");
+		Trade trade1 = new Trade("", "test", 14.99);
+		Trade trade2 = new Trade("test", "", 12.00);
 
 		Assertions.assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy(() -> tradeService.save(trade1));
 		Assertions.assertThatExceptionOfType(ConstraintViolationException.class).isThrownBy(() -> tradeService.save(trade2));

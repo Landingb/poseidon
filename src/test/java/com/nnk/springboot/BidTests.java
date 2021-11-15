@@ -1,7 +1,6 @@
 package com.nnk.springboot;
 
 import com.nnk.springboot.domain.BidList;
-import com.nnk.springboot.repositories.BidListRepository;
 import com.nnk.springboot.services.BidListService;
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
