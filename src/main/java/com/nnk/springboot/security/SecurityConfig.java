@@ -1,6 +1,7 @@
 package com.nnk.springboot.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,44 +9,63 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import javax.sql.DataSource;
+
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+
+    @Autowired
+    DataSource dataSource;
+
     @Autowired
     private UserDetailsService userDetailsService;
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
         auth
                 .userDetailsService(userDetailsService)
-                .passwordEncoder(new BCryptPasswordEncoder());
+                .passwordEncoder(passwordEncoder())
+                .passwordEncoder(new BCryptPasswordEncoder(8));
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder;
+    }
 
     @Override
-    protected  void configure(HttpSecurity http) throws Exception {
+    protected void configure(HttpSecurity http) throws Exception {
         http.
                 authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
 
-                /*.antMatchers("/user/**").hasAuthority("ADMIN").anyRequest().authenticated()*/
-                .anyRequest().permitAll()
+
+                .anyRequest().authenticated()
 
                 .and()
                 .formLogin()
-                /*.failureUrl("/login?error=true")*/
+                .failureUrl("/login?error=true")
                 .defaultSuccessUrl("/bidList/list")
 
-                .and().logout()
+                .and().logout().invalidateHttpSession(true).clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/app-logout"))
                 .logoutSuccessUrl("/login").and()
 
                 .exceptionHandling()
-                .accessDeniedPage("/app/error");
+                .accessDeniedPage("/app/error")
+                .and()
+                .rememberMe().key("lkl,P3/*8[]*&^.k1654326").tokenValiditySeconds(86400); //1day
     }
+
 }
