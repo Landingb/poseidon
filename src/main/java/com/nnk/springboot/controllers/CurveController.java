@@ -76,10 +76,11 @@ public class CurveController {
 
         if(!result.hasErrors()){
             curvePointService.save(curvePoint);
-            return "curvePoint/update";
+
+            return "redirect:/curvePoint/list";
         }
         else {
-            return "redirect:/curvePoint/list";
+            return "curvePoint/update";
         }
     }
 

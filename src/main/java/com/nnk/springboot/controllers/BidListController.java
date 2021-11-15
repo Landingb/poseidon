@@ -68,7 +68,7 @@ public class BidListController {
 
         BidList obid = bidListService.findById(id);
         if(obid != null){
-            model.addAttribute("bidists", obid);
+            model.addAttribute("bidList", obid);
         }
 
         return "bidList/update";
@@ -79,14 +79,14 @@ public class BidListController {
                              BindingResult result, Model model) {
         // TODO: check required fields, if valid call service to update Bid and return list Bid
         log.info("POST Request to /bidList/update/" + id);
-        if(! result.hasErrors()){
+
+        if(!result.hasErrors()){
             bidListService.save(bidList);
+            return "redirect:/bidList/list";
         }
         else {
             return "bidList/update";
         }
-
-        return "redirect:/bidList/list";
     }
 
     @GetMapping("/bidList/delete/{id}")
