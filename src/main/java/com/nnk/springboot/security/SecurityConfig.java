@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
@@ -51,21 +50,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll()
 
 
-                .anyRequest().authenticated()
+                /*.anyRequest().authenticated()*/
+                .anyRequest().permitAll()
 
                 .and()
                 .formLogin()
-                .failureUrl("/login?error=true")
+
                 .defaultSuccessUrl("/bidList/list")
 
-                .and().logout().invalidateHttpSession(true).clearAuthentication(true)
+                .and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/app-logout"))
                 .logoutSuccessUrl("/login").and()
 
                 .exceptionHandling()
-                .accessDeniedPage("/app/error")
-                .and()
-                .rememberMe().key("lkl,P3/*8[]*&^.k1654326").tokenValiditySeconds(86400); //1day
+                .accessDeniedPage("/app/error");
     }
 
 }

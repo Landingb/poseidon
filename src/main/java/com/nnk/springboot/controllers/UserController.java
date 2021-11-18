@@ -50,31 +50,17 @@ public class UserController {
     public String validate(@Valid User user, BindingResult result, Model model) throws UsernameExistException, PasswordPatternException {
         log.info("POST request to /user/add");
 
-        if(! result.hasErrors()){
+        if(!result.hasErrors()){
             userService.save(user);
-
+            model.addAttribute("user", user);
+            return "redirect:/user/list";
         }
         else{
             return "user/add";
         }
-        return "redirect:/user/list";
+
     }
 
-/*        try {
-            userService.save(user);
-        } catch (PasswordPatternException e) {
-            log.info("POST Request to /user/validate, error: "+e.getMessage());
-            result.addError(new FieldError("password", "password", e.getMessage()));
-            e.printStackTrace();
-
-        } catch (UsernameExistException e) {
-            log.info("POST Request to /user/validate, error: " + e.getMessage());
-            result.addError(new FieldError("username", "username", e.getMessage()));
-            e.printStackTrace();
-
-        }
-        return "redirect:/user/list";
-    }*/
 
     @GetMapping("/user/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
